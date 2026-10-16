@@ -1,0 +1,4 @@
+@import "tailwindcss";
+html, body { margin: 0; padding: 0; background: transparent !important; }
+html { overflow: hidden; }
+body { font-family: var(--dockit-font, Pretendard), sans-serif; }

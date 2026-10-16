@@ -1,0 +1,21 @@
+{
+  "manifestVersion": 1,
+  "sdkVersion": 2,
+  "id": "dockit.image-search",
+  "name": "이미지 검색",
+  "description": "Pixabay의 사진·일러스트·벡터를 검색하고 다운로드합니다.",
+  "publisher": "nokryong",
+  "version": "0.1.0",
+  "icon": "react-icons/md/MdImageSearch",
+  "permissions": ["storage", "network", "credentials", "images", "external"],
+  "services": {
+    "pixabay": {
+      "label": "Pixabay",
+      "url": "https://pixabay.com/api/",
+      "credential": { "in": "query", "name": "key" }
+    }
+  },
+  "imageOrigins": ["https://pixabay.com", "https://cdn.pixabay.com"],
+  "externalOrigins": ["https://pixabay.com"],
+  "widgets": [{ "id": "image-search", "title": "이미지 검색", "entry": "dist/index.html" }]
+}

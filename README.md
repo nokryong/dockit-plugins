@@ -15,11 +15,15 @@ https://github.com/nokryong/dockit-plugins
 | 플러그인 | 작성자 | 설치 주소 |
 |---|---|---|
 | 주사위 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/dice |
+| 이미지 검색 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/image-search |
+
+이미지 검색은 SDK v2를 지원하는 Dockit Open에서 사용할 수 있습니다. 툴킷의 열쇠 버튼에서 본인의 [Pixabay API Key](https://pixabay.com/api/docs/)를 등록하세요. 검색 결과는 24시간 캐시합니다.
 
 ## 개발
 
 ```sh
 npm ci
+npm test
 npm run build
 npm run check
 ```
