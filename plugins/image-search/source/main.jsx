@@ -128,7 +128,7 @@ function ImageSearch() {
         <Typography as="div" className="text-right" color="cool-gray-7" size="sm">{result.totalHits ? `총 ${result.totalHits}건` : '검색결과가 없습니다.'}</Typography>
         {result.hits.map(image => <SearchImage key={image.id} image={image} />)}
       </div>}
-      {result?.totalHits > PAGE_SIZE && <Pagination align="center" total={result.totalHits} pageSize={PAGE_SIZE} current={page} onChange={nextPage => search(nextPage)} maxVisibleButtons={wide ? 3 : 1} showFirstLast={wide} activeStyle={{ background: `${theme.name}-7`, color: `${theme.name}-1`, size: 'sm', shadow: 'sm' }} defaultStyle={{ background: `${theme.name}-1`, color: `${theme.name}-7`, size: 'sm', shadow: 'sm' }} />}
+      {result?.totalHits > PAGE_SIZE && <Pagination className={wide ? '' : '[&_.sud-pagination__ellipsis]:hidden'} align="center" total={result.totalHits} pageSize={PAGE_SIZE} current={page} onChange={nextPage => search(nextPage)} maxVisibleButtons={wide ? 3 : 1} showFirstLast={wide} activeStyle={{ background: `${theme.name}-7`, color: `${theme.name}-1`, size: 'sm', shadow: 'sm' }} defaultStyle={{ background: `${theme.name}-1`, color: `${theme.name}-7`, size: 'sm', shadow: 'sm' }} />}
       <div className="flex justify-end"><Button {...smallProps} onClick={() => sdk.openExternal('https://pixabay.com/').catch(report)}><Typography size="xs" className="underline">Pixabay</Typography></Button></div>
     </div>
   </SoonUIDesign>;
