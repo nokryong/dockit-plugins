@@ -48,15 +48,16 @@ function SearchImage({ image }) {
     } catch (error) { report(error); }
     finally { setOpening(false); }
   };
-  return <button ref={ref} type="button" aria-label={`${image.tags} 미리보기`} disabled={opening} onClick={preview} className="relative flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg border-0 bg-transparent p-0 disabled:cursor-wait" style={{ aspectRatio: `${image.webformatWidth || 4} / ${image.webformatHeight || 3}` }}>
-    {src ? <img src={src} alt={image.tags} className="block h-full w-full object-contain" /> : failed ? <TbPhoto size={24} /> : <TbLoader2 className="animate-spin" size={20} />}
+  return <button ref={ref} type="button" aria-label={`${image.tags} 미리보기`} disabled={opening} onClick={preview} className="relative flex w-full shrink-0 cursor-pointer items-center justify-center overflow-hidden border-0 bg-transparent p-0 disabled:cursor-wait" style={{ aspectRatio: `${image.webformatWidth || 4} / ${image.webformatHeight || 3}` }}>
+    {src ? <img src={src} alt={image.tags} className="block h-auto w-full" /> : failed ? <TbPhoto size={24} /> : <TbLoader2 className="animate-spin" size={20} />}
     {opening && <span className="absolute inset-0 flex items-center justify-center bg-black/20"><TbLoader2 className="animate-spin text-white" size={24} /></span>}
   </button>;
 }
 
 function ImageSearch() {
   const [theme, setTheme] = useState(sdk.theme);
-  const [wide, setWide] = useState(window.innerWidth >= 220);
+  const [width, setWidth] = useState(window.innerWidth);
+  const wide = width >= 220;
   const [credential, setCredential] = useState(null);
   const [configuring, setConfiguring] = useState(false);
   const [term, setTerm] = useState('');
@@ -70,10 +71,9 @@ function ImageSearch() {
   const resultsRef = useRef(null);
   useEffect(() => sdk.onThemeChange(setTheme), []);
   useEffect(() => {
-    const query = window.matchMedia('(min-width: 220px)');
-    const update = () => setWide(query.matches);
-    update(); query.addEventListener('change', update);
-    return () => query.removeEventListener('change', update);
+    const observer = new ResizeObserver(([entry]) => setWidth(entry.contentRect.width));
+    observer.observe(resultsRef.current);
+    return () => observer.disconnect();
   }, []);
   useEffect(() => { sdk.credentials.status('pixabay').then(setCredential).catch(report); }, []);
   const configure = useCallback(async () => {
@@ -108,6 +108,7 @@ function ImageSearch() {
   const baseTheme = theme.isDarkMode ? darkTheme : defaultTheme;
   const palette = { ...baseTheme, colors: theme.colors, body: { ...baseTheme.body, backgroundColor: 'transparent' } };
   return <SoonUIDesign theme={palette} darkTheme={palette} isDarkMode={theme.isDarkMode}>
+    <div ref={resultsRef} className="max-h-[450px] w-full min-w-0 overflow-y-auto">
     <div className="flex w-full min-w-0 flex-col gap-2 p-0.5">
       <div className="grid min-w-0 grid-cols-1 gap-2 min-[220px]:grid-cols-[minmax(0,1fr)_104px]">
         <Input {...inputProps} ariaLabel="이미지 검색어" value={term} onChange={event => setTerm(event.target.value.slice(0, 100))} placeholder="검색할 단어를 입력하세요" onEnter={() => search(1)} background={`${theme.name}-1`} />
@@ -124,12 +125,13 @@ function ImageSearch() {
         <Button {...smallProps} onClick={() => sdk.openExternal('https://pixabay.com/api/docs/').catch(report)}><Typography size="xs" className="underline">키 발급</Typography></Button>
       </div>}
       {loading && <div role="status" aria-label="이미지 검색 중" className="flex justify-center py-1"><TbLoader2 className="animate-spin" size={20} /></div>}
-      {result && <div ref={resultsRef} aria-label="이미지 검색 결과" className="flex max-h-[300px] min-w-0 flex-col gap-2 overflow-y-auto">
+      {result && <div aria-label="이미지 검색 결과" className="flex min-w-0 flex-col gap-2">
         <Typography as="div" className="text-right" color="cool-gray-7" size="sm">{result.totalHits ? `총 ${result.totalHits}건` : '검색결과가 없습니다.'}</Typography>
         {result.hits.map(image => <SearchImage key={image.id} image={image} />)}
       </div>}
-      {result?.totalHits > PAGE_SIZE && <Pagination className={wide ? '' : '[&>span]:hidden'} align="center" total={result.totalHits} pageSize={PAGE_SIZE} current={page} onChange={nextPage => search(nextPage)} maxVisibleButtons={wide ? 3 : 1} showFirstLast={wide} activeStyle={{ background: `${theme.name}-7`, color: `${theme.name}-1`, size: 'sm', shadow: 'sm' }} defaultStyle={{ background: `${theme.name}-1`, color: `${theme.name}-7`, size: 'sm', shadow: 'sm' }} />}
+      {result?.totalHits > PAGE_SIZE && <Pagination className={wide ? '' : '[&>span]:hidden'} align="center" total={result.totalHits} pageSize={PAGE_SIZE} current={page} onChange={nextPage => search(nextPage)} maxVisibleButtons={wide ? 3 : 1} showFirstLast={width >= 300} activeStyle={{ background: `${theme.name}-7`, color: `${theme.name}-1`, size: 'sm', shadow: 'sm' }} defaultStyle={{ background: `${theme.name}-1`, color: `${theme.name}-7`, size: 'sm', shadow: 'sm' }} />}
       <div className="flex justify-end"><Button {...smallProps} onClick={() => sdk.openExternal('https://pixabay.com/').catch(report)}><Typography size="xs" className="underline">Pixabay</Typography></Button></div>
+    </div>
     </div>
   </SoonUIDesign>;
 }
