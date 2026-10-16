@@ -1,0 +1,12 @@
+{
+  "name": "dockit-plugins",
+  "version": "0.1.0",
+  "private": true,
+  "author": "nokryong",
+  "scripts": { "build": "node scripts/build.mjs", "check": "node scripts/check.cjs" },
+  "dependencies": { "react": "19.1.0", "react-dom": "19.1.0", "react-icons": "5.7.0", "sud-ui": "2.1.0" },
+  "devDependencies": {
+    "@dockit/plugin-sdk": "https://github.com/nokryong/dockit-plugin-sdk/archive/92e26d0ccb4ffc65f165cd2e8c6a92ec0b334c04.tar.gz",
+    "vite": "6.4.3"
+  }
+}
