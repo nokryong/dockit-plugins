@@ -1,0 +1,20 @@
+{
+  "manifestVersion": 1,
+  "sdkVersion": 2,
+  "id": "dockit.calendar",
+  "name": "달력",
+  "description": "날짜별 일정을 기기에 저장하고 관리합니다.",
+  "publisher": "nokryong",
+  "version": "0.1.0",
+  "icon": "react-icons/tb/TbCalendar",
+  "permissions": [
+    "storage"
+  ],
+  "widgets": [
+    {
+      "id": "calendar",
+      "title": "달력",
+      "entry": "dist/index.html"
+    }
+  ]
+}
