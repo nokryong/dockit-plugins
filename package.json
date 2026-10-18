@@ -14,7 +14,7 @@
     "react-dom": "19.1.0",
     "react-icons": "5.7.0",
     "sud-icons": "1.0.4",
-    "sud-ui": "2.1.0"
+    "sud-ui": "2.1.1"
   },
   "devDependencies": {
     "@dockit/plugin-sdk": "https://github.com/nokryong/dockit-plugin-sdk/archive/5bf23602b42a4e93004590816a5096fcf9977bbd.tar.gz",
