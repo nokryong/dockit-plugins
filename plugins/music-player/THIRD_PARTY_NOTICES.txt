@@ -183,7 +183,7 @@ Icons8 Line Awesome - https://icons8.com/line-awesome
 License: MIT https://github.com/icons8/line-awesome/blob/master/LICENSE.md
 
 
-sud-ui 2.1.0
+sud-ui 2.1.1
 ========================================================================
 MIT License
 
