@@ -19,14 +19,12 @@ https://github.com/nokryong/dockit-plugins
 | 국어사전 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/dictionary |
 | 공공데이터 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/data-portal |
 | PRISM 연구보고서 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/prism |
-| 위키백과 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/wikipedia |
 | 달력 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/calendar |
 | 음악 플레이어 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/music-player |
-| GeoJSON 지도 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/geojson-map |
 
 이미지 검색은 SDK v2를 지원하는 Dockit Open과 Dockit Web에서 사용할 수 있습니다. 툴킷의 열쇠 버튼에서 본인의 [Pixabay API Key](https://pixabay.com/api/docs/)를 등록하세요. 검색 결과는 24시간 캐시합니다.
 
-국어사전, 공공데이터, PRISM 연구보고서는 Dockit 서버(`https://dockit.kr/api/...`)를 거쳐 조회하므로 API Key가 필요 없습니다. 위키백과는 한국어 위키백과 공개 API를 사용합니다. 달력은 일정을 플러그인 저장소에 보관합니다. 음악 플레이어와 GeoJSON 지도는 사용자가 직접 연 로컬 파일만 사용하며, 음악 재생목록은 창을 닫으면 사라집니다.
+국어사전, 공공데이터, PRISM 연구보고서는 Dockit 서버(`https://dockit.kr/api/...`)를 거쳐 조회하므로 API Key가 필요 없습니다. 달력은 일정을 플러그인 저장소에 보관합니다. 음악 플레이어는 사용자가 직접 연 로컬 음악 파일만 사용하며, 재생목록은 창을 닫으면 사라집니다.
 
 ## 개발
 
