@@ -1,72 +1,130 @@
+// Port of dockit/app/LIB/components/panel/CalendarWidget.js.
+// Events live in plugin storage instead of the account API, the add dialog opens inline above the
+// calendar because a modal cannot leave the widget frame, and holidays are not shown.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { sdk, report, useActions, useFooter, useTheme } from './runtime.mjs';
-import { EVENTS_KEY, addEvent, dateKey, eventsOn, monthCells, normalizeEvents, parseDate, shiftMonth } from './calendar.mjs';
-import './style.css';
+import { Button, Calendar, DatePicker, Divider, Input, Tag, Typography } from 'sud-ui';
+import { TriangleLeft, TriangleRight } from 'sud-icons';
+import dayjs from 'dayjs';
+import { PluginRoot, inputProps, report, sdk, shadowSm, useActions, useDockitTheme } from '../../../shared/dockit.jsx';
+import { EVENTS_KEY, addEvent, normalizeEvents } from './calendar.mjs';
+import '../../../shared/base.css';
 
-function Calendar() {
-  useTheme();
-  const today = dateKey(new Date());
-  const [selected, setSelected] = useState(today);
-  const [month, setMonth] = useState(today.slice(0, 7));
+function CalendarWidget() {
+  const theme = useDockitTheme();
   const [events, setEvents] = useState([]);
   const [loaded, setLoaded] = useState(false);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState('');
-  const [editing, setEditing] = useState(false);
-  const [content, setContent] = useState('');
-  const [itemDate, setItemDate] = useState(today);
-  const lock = useRef(false), input = useRef(null), mounted = useRef(false);
-  const load = useCallback(async () => {
-    setError(''); setLoaded(false);
-    try { const data = normalizeEvents(await sdk.storage.get(EVENTS_KEY)); if (mounted.current) { setEvents(data); setLoaded(true); } }
-    catch (failure) { if (mounted.current) { setError(failure.message); report(failure); } }
+  const [date, setDate] = useState(dayjs());
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [itemContent, setItemContent] = useState('');
+  const [itemDate, setItemDate] = useState(dayjs());
+  const [calendarError, setCalendarError] = useState(null);
+  const eventsRef = useRef([]);
+
+  useEffect(() => {
+    let alive = true;
+    sdk.storage.get(EVENTS_KEY).then(value => {
+      if (!alive) return;
+      const list = normalizeEvents(value);
+      eventsRef.current = list; setEvents(list); setLoaded(true);
+    }).catch(error => {
+      if (!alive) return;
+      setCalendarError('일정을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.');
+      report(error);
+    });
+    return () => { alive = false; };
   }, []);
-  useEffect(() => { mounted.current = true; load(); return () => { mounted.current = false; }; }, [load]);
-  useEffect(() => { if (editing) input.current?.focus(); }, [editing]);
-  const actions = useMemo(() => [{ id: 'add', label: '일정 추가', icon: 'plus', disabled: !loaded || busy }, { id: 'today', label: '오늘', icon: 'refresh' }], [loaded, busy]);
-  const handleAction = useCallback(id => {
-    if (id === 'today') { const value = dateKey(new Date()); setSelected(value); setMonth(value.slice(0, 7)); }
-    if (id === 'add' && loaded && !busy) { setItemDate(selected); setEditing(true); }
-  }, [loaded, busy, selected]);
-  useActions(actions, handleAction);
-  useFooter(loaded ? `저장된 일정 ${events.length}개` : error ? '일정을 불러오지 못했습니다' : '일정을 불러오는 중');
-  const changeMonth = value => {
-    try { parseDate(value + '-01'); setMonth(value); setSelected(value + '-01'); } catch (failure) { report(failure); }
+
+  const save = async next => {
+    await sdk.storage.set(EVENTS_KEY, next);
+    eventsRef.current = next; setEvents(next);
   };
-  const moveMonth = amount => { try { changeMonth(shiftMonth(month, amount)); } catch (failure) { report(failure); } };
-  const save = async (next, after) => {
-    if (lock.current || !loaded) return;
-    lock.current = true; setBusy(true); setError('');
-    try { await sdk.storage.set(EVENTS_KEY, next); if (mounted.current) { setEvents(next); after?.(); } }
-    catch (failure) { if (mounted.current) { setError('일정을 저장하지 못했습니다. 다시 시도해주세요.'); report(failure); } }
-    finally { lock.current = false; if (mounted.current) setBusy(false); }
+
+  const openAdd = useCallback(id => { if (id === 'add') { setItemDate(date); setOpenAddModal(true); } }, [date]);
+  const actions = useMemo(() => [{ id: 'add', label: '일정 추가', icon: 'plus', disabled: !loaded }], [loaded]);
+  useActions(actions, openAdd);
+
+  const handlePrev = () => setDate(value => value.subtract(1, 'month').startOf('month'));
+  const handleNext = () => setDate(value => value.add(1, 'month').startOf('month'));
+  const monthNumber = date.month() + 1;
+
+  const handleAddItem = async () => {
+    if (itemContent === '' || !itemDate) return;
+    try {
+      const id = globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      await save(addEvent(eventsRef.current, { id, date: dayjs(itemDate).format('YYYY-MM-DD'), content: itemContent }));
+      setOpenAddModal(false);
+      setItemContent('');
+      setItemDate(dayjs());
+      setCalendarError(null);
+      sdk.notify('일정이 추가되었습니다.', 'info').catch(() => {});
+    } catch (error) {
+      setCalendarError('일정을 저장하지 못했습니다. 입력값은 유지됩니다.');
+      report(error);
+    }
   };
-  const submit = event => {
-    event.preventDefault();
-    try { const next = addEvent(events, { id: crypto.randomUUID(), date: itemDate, content }); save(next, () => { setEditing(false); setContent(''); setSelected(itemDate); setMonth(itemDate.slice(0, 7)); }); }
-    catch (failure) { setError(failure.message); report(failure); }
+
+  const handleDeleteEvent = async id => {
+    try {
+      await save(eventsRef.current.filter(event => event.id !== id));
+      setCalendarError(null);
+    } catch (error) {
+      setCalendarError('일정을 삭제하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+      report(error);
+    }
   };
-  const counts = new Map(); for (const event of events) counts.set(event.date, (counts.get(event.date) || 0) + 1);
-  const selectedEvents = eventsOn(events, selected);
-  return <main aria-label="달력">
-    <div className="row"><button aria-label="이전 달" onClick={() => moveMonth(-1)}>‹</button><label className="grow"><span className="sr-only">표시할 연월</span><input aria-label="표시할 연월" type="month" min="0001-01" max="9999-12" value={month} onChange={e => { if (e.target.value) changeMonth(e.target.value); }} /></label><button aria-label="다음 달" onClick={() => moveMonth(1)}>›</button></div>
-    <div className="calendar-grid" role="group" aria-label={`${month} 날짜 선택`}>
-      {['일', '월', '화', '수', '목', '금', '토'].map(day => <span className="weekday" key={day}>{day}</span>)}
-      {monthCells(month).map(cell => <button key={cell.key} disabled={!cell.selectable} className={`${cell.inMonth ? '' : 'outside'} ${cell.key === today ? 'today' : ''}`} aria-label={`${cell.key}${cell.key === today ? ' 오늘' : ''}, 일정 ${counts.get(cell.key) || 0}개`} aria-current={cell.key === today ? 'date' : undefined} aria-pressed={selected === cell.key} onClick={() => { setSelected(cell.key); if (!cell.inMonth) setMonth(cell.key.slice(0, 7)); }}><span>{cell.day}</span><small aria-hidden="true">{counts.has(cell.key) ? '●' : '\u00a0'}</small></button>)}
-    </div>
-    {!loaded && !error && <p role="status">일정을 불러오고 있어요.</p>}
-    {error && <div role="alert" className="stack"><p className="error">{error}</p>{!loaded && <button onClick={load}>다시 불러오기</button>}</div>}
-    <section className="stack" aria-label="선택한 날짜의 일정">
-      <div className="row wrap"><h3 className="grow">{selected} 일정</h3><button disabled={!loaded || busy} onClick={() => handleAction('add')}>일정 추가</button></div>
-      {loaded && !selectedEvents.length && <p className="muted">등록된 일정이 없습니다.</p>}
-      <ul className="stack">{selectedEvents.map(event => <li className="row panel" key={event.id}><p className="grow prose">{event.content}</p><button disabled={busy} aria-label={`${event.content} 삭제`} onClick={() => save(events.filter(item => item.id !== event.id))}>삭제</button></li>)}</ul>
-    </section>
-    {editing && <div className="stack panel" role="group" aria-label="일정 추가">
-      <label>날짜<input type="date" required min="0001-01-01" max="9999-12-31" value={itemDate} disabled={busy} onChange={e => setItemDate(e.target.value)} /></label>
-      <label>내용<input ref={input} required maxLength={500} value={content} disabled={busy} onChange={e => setContent(e.target.value)} placeholder="일정을 입력하세요" onKeyDown={event => { if (event.key === 'Enter' && !event.nativeEvent.isComposing) { if (!busy && content.trim() && itemDate) submit(event); }; }} /></label>
-      <div className="row wrap"><button type="button" className="primary" disabled={busy || !content.trim() || !itemDate} onClick={submit}>{busy ? '저장 중…' : '저장'}</button><button type="button" disabled={busy} onClick={() => setEditing(false)}>취소</button></div>
-    </div>}
-  </main>;
+
+  const todayEvents = events.filter(event => dayjs(event.date).isSame(date, 'day'));
+
+  return (
+    <PluginRoot theme={theme}>
+      <div className="w-full flex flex-col gap-2 p-0.5">
+        {openAddModal && (
+          <div className="flex flex-col gap-2 p-3 rounded-xl" style={shadowSm.style}>
+            <Typography pretendard="SB" size="lg">일정추가</Typography>
+            <Input placeholder="내용" value={itemContent} onChange={e => setItemContent(e.target.value)} {...inputProps} background={`${theme.name}-1`} />
+            <DatePicker placeholder="날짜" locale="ko" value={itemDate} onChange={value => setItemDate(value)} {...inputProps} background={`${theme.name}-1`} />
+            <div className="flex justify-end gap-2">
+              <Button onClick={() => setOpenAddModal(false)} colorType="danger" size="sm" border={false} {...shadowSm}>취소</Button>
+              <Button onClick={handleAddItem} disabled={itemContent === '' || !itemDate} colorType="primary" size="sm" border={false} {...shadowSm}>추가</Button>
+            </div>
+          </div>
+        )}
+        <Calendar
+          value={date}
+          locale="ko"
+          items={events}
+          onChange={value => setDate(dayjs(value))}
+          size="miniView"
+          headerRender={
+            <div className="flex justify-center items-center w-full">
+              <Button onClick={handlePrev} size="sm" colorType="text" icon={<TriangleLeft size={15} />} ariaLabel="이전 달" />
+              <Typography as="span" gmarket="Medium">
+                {date.year()}년 {monthNumber < 10 ? `0${monthNumber}월` : `${monthNumber}월`}
+              </Typography>
+              <Button onClick={handleNext} size="sm" colorType="text" icon={<TriangleRight size={15} />} ariaLabel="다음 달" />
+            </div>
+          }
+        />
+        <Divider />
+        {calendarError && (
+          <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2">
+            <Typography color="red-7" size="sm">{calendarError}</Typography>
+          </div>
+        )}
+        <div className="flex flex-col gap-2 items-center">
+          <Typography gmarket="Medium" className="text-center">{date.format('YYYY/MM/DD')} 일정</Typography>
+          <div className="flex flex-wrap gap-2 overflow-y-auto max-h-[80px]">
+            {todayEvents.map((event, index) => (
+              <Tag key={event.id} colorType={index % 2 === 0 ? theme.name : 'blue'} closeable onClose={() => handleDeleteEvent(event.id)}>
+                <Typography size="sm">● {event.content}</Typography>
+              </Tag>
+            ))}
+          </div>
+        </div>
+      </div>
+    </PluginRoot>
+  );
 }
-sdk.ready.then(() => createRoot(document.getElementById('root')).render(<Calendar />));
+
+sdk.ready.then(() => createRoot(document.getElementById('root')).render(<CalendarWidget />));

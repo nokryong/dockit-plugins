@@ -5,7 +5,7 @@
   "name": "이미지 검색",
   "description": "Pixabay의 사진·일러스트·벡터를 검색하고 다운로드합니다.",
   "publisher": "nokryong",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "icon": "react-icons/md/MdImageSearch",
   "permissions": ["storage", "network", "credentials", "images", "external"],
   "services": {

@@ -17,7 +17,6 @@ https://github.com/nokryong/dockit-plugins
 | 주사위 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/dice |
 | 이미지 검색 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/image-search |
 | 우리말 사전 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/dictionary |
-| PRISM 연구보고서 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/prism |
 | 달력 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/calendar |
 | 음악 플레이어 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/music-player |
 

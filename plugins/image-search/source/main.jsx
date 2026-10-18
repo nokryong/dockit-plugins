@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Button, Div, Input, Pagination, Radio, Select, SoonUIDesign, Typography, defaultTheme, darkTheme } from 'sud-ui';
+import { Button, Div, Input, Pagination, Radio, Select, Skeleton, SoonUIDesign, Typography, defaultTheme, darkTheme } from 'sud-ui';
 import { PiCheckFatFill } from 'react-icons/pi';
-import { TbLoader2, TbPhoto } from 'react-icons/tb';
+import { TbPhoto } from 'react-icons/tb';
 import 'sud-ui/dist/index.css';
 import './style.css';
 import { createSearchClient, PAGE_SIZE } from './search.mjs';
@@ -49,8 +49,8 @@ function SearchImage({ image }) {
     finally { setOpening(false); }
   };
   return <button ref={ref} type="button" aria-label={`${image.tags} 미리보기`} disabled={opening} onClick={preview} className="relative flex w-full shrink-0 cursor-pointer items-center justify-center overflow-hidden border-0 bg-transparent p-0 disabled:cursor-wait" style={{ aspectRatio: `${image.webformatWidth || 4} / ${image.webformatHeight || 3}` }}>
-    {src ? <img src={src} alt={image.tags} className="block h-auto w-full" /> : failed ? <TbPhoto size={24} /> : <TbLoader2 className="animate-spin" size={20} />}
-    {opening && <span className="absolute inset-0 flex items-center justify-center bg-black/20"><TbLoader2 className="animate-spin text-white" size={24} /></span>}
+    {src ? <img src={src} alt={image.tags} className="block h-auto w-full" /> : failed ? <TbPhoto size={24} /> : <Div className="h-full w-full animate-pulse" background="cool-gray-2" />}
+    {opening && <span className="absolute inset-0 animate-pulse bg-black/20" />}
   </button>;
 }
 
@@ -66,6 +66,7 @@ function ImageSearch() {
   const [result, setResult] = useState(null);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [searchError, setSearchError] = useState(null);
   const sequence = useRef(0);
   const timer = useRef(null);
   const resultsRef = useRef(null);
@@ -90,14 +91,14 @@ function ImageSearch() {
   const search = useCallback(async (nextPage = 1) => {
     clearTimeout(timer.current);
     const current = ++sequence.current;
-    if (!term.trim() || !credential?.configured) { setLoading(false); setResult(null); return; }
-    setLoading(true);
+    if (!term.trim() || !credential?.configured) { setLoading(false); setResult(null); setSearchError(null); return; }
+    setLoading(true); setSearchError(null);
     try {
       const response = await searchImages({ q: term, type, color, page: nextPage }, credential.revision);
       if (sequence.current !== current) return;
       setResult(response); setPage(nextPage);
       resultsRef.current?.scrollTo({ top: 0 });
-    } catch (error) { if (sequence.current === current) { setResult(null); report(error); } }
+    } catch (error) { if (sequence.current === current) { setResult(null); setSearchError(error?.message || '이미지 검색에 실패했습니다. 잠시 후 다시 시도해 주세요.'); } }
     finally { if (sequence.current === current) setLoading(false); }
   }, [term, type, color, credential?.configured, credential?.revision]);
   useEffect(() => {
@@ -124,8 +125,13 @@ function ImageSearch() {
         <Button {...smallProps} disabled={configuring} onClick={configure}><Typography size="xs" className="underline">API Key 설정</Typography></Button>
         <Button {...smallProps} onClick={() => sdk.openExternal('https://pixabay.com/api/docs/').catch(report)}><Typography size="xs" className="underline">키 발급</Typography></Button>
       </div>}
-      {loading && <div role="status" aria-label="이미지 검색 중" className="flex justify-center py-1"><TbLoader2 className="animate-spin" size={20} /></div>}
-      {result && <div aria-label="이미지 검색 결과" className="flex min-w-0 flex-col gap-2">
+      {loading ? <Skeleton active ariaLabel="이미지 검색 중" baseColor="cool-gray-2" highlightColor="cool-gray-1" />
+        : searchError ? <div className="flex flex-col gap-2 items-center mb-2.5">
+          <Typography color="red-7" size="sm">{searchError}</Typography>
+          <Button size="sm" onClick={() => search(1)} ariaLabel="이미지 검색 다시 시도" border={false} shadow="sm" color="white-1" background="white-10">다시 시도</Button>
+        </div>
+        : credential?.configured && !result && <Typography as="div" className="text-center" color="cool-gray-7" size="sm">검색어를 입력하고 Enter를 눌러 주세요.</Typography>}
+      {!loading && result && <div aria-label="이미지 검색 결과" className="flex min-w-0 flex-col gap-2">
         <Typography as="div" className="text-right" color="cool-gray-7" size="sm">{result.totalHits ? `총 ${result.totalHits}건` : '검색결과가 없습니다.'}</Typography>
         {result.hits.map(image => <SearchImage key={image.id} image={image} />)}
       </div>}

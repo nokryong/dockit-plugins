@@ -33,3 +33,13 @@ export function createPlaylist(urlApi) {
     clear() { for (const track of tracks.values()) urlApi.revokeObjectURL(track.url); tracks.clear(); },
   };
 }
+export function trackTitle(name) {
+  const title = String(name || '').replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ').replace(/\s+\d+$/, '').trim();
+  return title || String(name || '');
+}
+export function folderFiles(files) {
+  const list = Array.from(files || []);
+  const path = file => file.webkitRelativePath || file.name || '';
+  const folder = path(list.find(file => path(file).includes('/')) || {}).split('/')[0] || '';
+  return { folder, files: list.sort((a, b) => path(a).localeCompare(path(b), 'ko', { numeric: true })) };
+}

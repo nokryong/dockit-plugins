@@ -5,7 +5,7 @@
   "name": "우리말 사전",
   "description": "우리말샘에서 단어와 뜻을 검색합니다.",
   "publisher": "nokryong",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "icon": "react-icons/tb/TbBook",
   "permissions": [
     "network"
