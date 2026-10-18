@@ -16,14 +16,12 @@ https://github.com/nokryong/dockit-plugins
 |---|---|---|
 | 주사위 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/dice |
 | 이미지 검색 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/image-search |
-| 국어사전 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/dictionary |
+| 우리말 사전 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/dictionary |
 | PRISM 연구보고서 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/prism |
 | 달력 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/calendar |
 | 음악 플레이어 | nokryong | https://github.com/nokryong/dockit-plugins/tree/main/plugins/music-player |
 
-이미지 검색은 SDK v2를 지원하는 Dockit Open과 Dockit Web에서 사용할 수 있습니다. 툴킷의 열쇠 버튼에서 본인의 [Pixabay API Key](https://pixabay.com/api/docs/)를 등록하세요. 검색 결과는 24시간 캐시합니다.
-
-국어사전과 PRISM 연구보고서는 Dockit 서버(`https://dockit.kr/api/...`)를 거쳐 조회하므로 API Key가 필요 없습니다. 달력은 일정을 플러그인 저장소에 보관합니다. 음악 플레이어는 사용자가 직접 연 로컬 음악 파일만 사용하며, 재생목록은 창을 닫으면 사라집니다.
+각 플러그인의 기능, 사용하는 서비스와 권한, 데이터 저장 위치는 플러그인 폴더의 `README.md`에 있습니다.
 
 ## 개발
 

@@ -27,7 +27,7 @@ function Dictionary() {
     catch (failure) { if (current === sequence.current) { setError(failure.message); report(failure); } }
     finally { if (current === sequence.current) setLoading(false); }
   };
-  return <main aria-label="국어사전">
+  return <main aria-label="우리말 사전">
     <div className="row search-form" role="search">
       <input ref={input} aria-label="사전 검색어" placeholder="검색할 단어를 입력하세요" maxLength={100} value={term} onChange={e => setTerm(e.target.value)} onKeyDown={event => { if (event.key === 'Enter' && !event.nativeEvent.isComposing) search(event); }} />
       <button type="button" className="primary" disabled={loading || !term.trim()} onClick={search}>검색</button>

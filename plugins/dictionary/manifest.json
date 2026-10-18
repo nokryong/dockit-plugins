@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "sdkVersion": 2,
   "id": "dockit.dictionary",
-  "name": "국어사전",
+  "name": "우리말 사전",
   "description": "우리말샘에서 단어와 뜻을 검색합니다.",
   "publisher": "nokryong",
   "version": "0.1.0",
@@ -12,14 +12,14 @@
   ],
   "services": {
     "dictionary": {
-      "label": "국어사전",
+      "label": "우리말 사전",
       "url": "https://dockit.kr/api/dictionary"
     }
   },
   "widgets": [
     {
       "id": "dictionary",
-      "title": "국어사전",
+      "title": "우리말 사전",
       "entry": "dist/index.html"
     }
   ]
