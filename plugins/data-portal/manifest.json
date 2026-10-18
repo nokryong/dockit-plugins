@@ -1,0 +1,19 @@
+{
+  "manifestVersion": 1,
+  "sdkVersion": 2,
+  "id": "dockit.data-portal",
+  "name": "공공데이터",
+  "description": "식품·관광·인구·국가 등 10종의 공공데이터를 조회합니다.",
+  "publisher": "nokryong",
+  "version": "0.1.0",
+  "icon": "react-icons/tb/TbDatabaseSmile",
+  "permissions": ["network", "images", "external"],
+  "services": {
+    "dataportal": { "label": "공공데이터", "url": "https://dockit.kr/api/dataportal" },
+    "country-info": { "label": "국가별 정보", "url": "https://dockit.kr/api/country-info" },
+    "population-info": { "label": "행정동별 인구", "url": "https://dockit.kr/api/population-info" }
+  },
+  "imageOrigins": ["https://tong.visitkorea.or.kr", "https://galphoto.visitkorea.or.kr", "https://www.forest.go.kr"],
+  "externalOrigins": ["https://www.data.go.kr", "https://www.culture.go.kr"],
+  "widgets": [{ "id": "data-portal", "title": "공공데이터", "entry": "dist/index.html" }]
+}

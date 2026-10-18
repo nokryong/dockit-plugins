@@ -1,0 +1,20 @@
+{
+  "manifestVersion": 1,
+  "sdkVersion": 2,
+  "id": "dockit.music-player",
+  "name": "음악 플레이어",
+  "description": "내 오디오 파일로 재생목록을 만들고 음악을 듣습니다.",
+  "publisher": "nokryong",
+  "version": "0.1.0",
+  "icon": "react-icons/tb/TbMusic",
+  "permissions": [
+    "storage"
+  ],
+  "widgets": [
+    {
+      "id": "music-player",
+      "title": "음악 플레이어",
+      "entry": "dist/index.html"
+    }
+  ]
+}
