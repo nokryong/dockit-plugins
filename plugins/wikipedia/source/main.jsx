@@ -41,7 +41,7 @@ function Wikipedia() {
     finally { if (current === searchId.current) setLoading(''); }
   };
   return <main aria-label="위키백과">
-    <form className="row search-form" onSubmit={search}><input aria-label="위키백과 검색어" placeholder="검색할 제목을 입력하세요" maxLength={100} value={term} onChange={e => setTerm(e.target.value)} /><button className="primary" disabled={!!loading || !term.trim()}>검색</button></form>
+    <div className="row search-form" role="search"><input aria-label="위키백과 검색어" placeholder="검색할 제목을 입력하세요" maxLength={100} value={term} onChange={e => setTerm(e.target.value)} onKeyDown={event => { if (event.key === 'Enter' && !event.nativeEvent.isComposing) search(event); }} /><button type="button" className="primary" disabled={!!loading || !term.trim()} onClick={search}>검색</button></div>
     {loading && <p role="status">{loading}</p>}
     {error && <div role="alert" className="stack"><p className="error">{error}</p><button onClick={() => failedTitle ? openArticle(failedTitle) : search()}>다시 시도</button></div>}
     {!results && !loading && !error && <p className="muted">제목을 검색하고 문서를 골라주세요.</p>}

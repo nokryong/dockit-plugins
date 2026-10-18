@@ -58,11 +58,11 @@ function Prism() {
   const palette = { ...base, colors: theme.colors, body: { ...base.body, backgroundColor: 'transparent' } };
   return <SoonUIDesign theme={palette} darkTheme={palette} isDarkMode={theme.isDarkMode}>
     <main className="prism-body" style={{ '--ink': theme.colors?.black?.[10], '--line': theme.colors?.['cool-gray']?.[3] }}>
-      <form className="search-form" onSubmit={event => { event.preventDefault(); search({ field, term }); }}>
-        <Input {...control} ariaLabel="정책연구 과제 검색어" placeholder="정책연구 과제 검색" value={term} onChange={event => setTerm(event.target.value.slice(0, 200))} background={`${theme.name}-1`} />
+      <div className="search-form" role="search">
+        <Input {...control} ariaLabel="정책연구 과제 검색어" placeholder="정책연구 과제 검색" value={term} onChange={event => setTerm(event.target.value.slice(0, 200))} onKeyDown={event => { if (event.key === 'Enter' && !event.nativeEvent.isComposing) search({ field, term }); }} background={`${theme.name}-1`} />
         <Select {...control} ariaLabel="검색 기준" value={field} onChange={setField} options={SEARCH_FIELDS} background={`${theme.name}-1`} dropdownStyle={{ maxHeight: 160 }} />
-        <Button {...small} type="submit" disabled={loading} background={`${theme.name}-2`}>검색</Button>
-      </form>
+        <Button {...small} type="button" disabled={loading} background={`${theme.name}-2`} onClick={() => search({ field, term })}>검색</Button>
+      </div>
       {loading && <Typography as="div" role="status" size="sm">검색 중…</Typography>}
       {error && <Typography as="div" role="alert" size="sm" color="red-7">{error}</Typography>}
       {result && <section className="results" aria-label="정책연구 검색 결과">

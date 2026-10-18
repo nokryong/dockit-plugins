@@ -124,8 +124,8 @@ function DataPortal() {
   return <SoonUIDesign theme={palette} darkTheme={palette} isDarkMode={theme.isDarkMode}>
     <main className="portal-body" style={{ '--ink': theme.colors?.black?.[10], '--line': theme.colors?.['cool-gray']?.[3], '--surface': theme.colors?.[theme.name]?.[1] }}>
       <label className="field"><Typography size="xs" color="cool-gray-7">데이터 종류</Typography><Select {...input} ariaLabel="데이터 종류" value={type} onChange={changeType} options={DATA_TYPES} dropdownStyle={{ maxHeight: 220 }} /></label>
-      <form className="search-form" onSubmit={event => { event.preventDefault(); search(currentQuery); }}>
-        {config.placeholder && <Input {...input} ariaLabel={config.placeholder} placeholder={config.placeholder} value={term} onChange={event => setTerm(event.target.value.slice(0, 200))} />}
+      <div className="search-form" role="search">
+        {config.placeholder && <Input {...input} ariaLabel={config.placeholder} placeholder={config.placeholder} value={term} onChange={event => setTerm(event.target.value.slice(0, 200))} onKeyDown={event => { if (event.key === 'Enter' && !event.nativeEvent.isComposing) search(currentQuery); }} />}
         {type === 'COUNTRY_INFO' && <Select {...input} ariaLabel="국가" searchable placeholder="국가 선택" value={code || null} onChange={setCode} options={COUNTRIES} dropdownStyle={{ maxHeight: 200 }} />}
         {type === 'POPULATION_INFO' && <>
           <Select {...input} ariaLabel="행정동" searchable placeholder="행정동 검색·선택" value={code || null} onChange={setCode} options={districtOptions} dropdownStyle={{ maxHeight: 200 }} />
@@ -133,8 +133,8 @@ function DataPortal() {
         </>}
         {type === 'NK_TV_SCHEDULE' && <label className="field"><Typography size="xs" color="cool-gray-7">방송일</Typography><input type="date" aria-label="방송일" value={date} onChange={event => setDate(event.target.value)} /></label>}
         {type === 'CULTURE_INFO' && <Select {...input} ariaLabel="공연 종류" value={culture} onChange={setCulture} options={CULTURE_TYPES.map(value => ({ value, label: value }))} dropdownStyle={{ maxHeight: 180 }} />}
-        <Button {...small} type="submit" disabled={loading} background={`${theme.name}-2`}>조회</Button>
-      </form>
+        <Button {...small} type="button" disabled={loading} background={`${theme.name}-2`} onClick={() => search(currentQuery)}>조회</Button>
+      </div>
       {loading && <Typography as="div" role="status" size="sm">조회 중…</Typography>}
       {error && <Typography as="div" role="alert" size="sm" color="red-7">{error}</Typography>}
       {result && <section aria-label="공공데이터 조회 결과" className="results">
