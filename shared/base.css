@@ -1,5 +1,6 @@
+@import "tailwindcss";
+@source "./";
 html, body { margin: 0; padding: 0; background: transparent !important; }
+html { overflow: hidden; }
 body { font-family: var(--dockit-font, Pretendard), sans-serif; }
 * { box-sizing: border-box; }
-.dice-body { padding: 3px; }
-.dice-grid { display: flex; flex-wrap: wrap; gap: 8px; }

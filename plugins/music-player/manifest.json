@@ -3,9 +3,9 @@
   "sdkVersion": 2,
   "id": "dockit.music-player",
   "name": "음악 플레이어",
-  "description": "내 오디오 파일로 재생목록을 만들고 음악을 듣습니다.",
+  "description": "내 음악 폴더를 골라 그 안의 곡을 재생합니다.",
   "publisher": "nokryong",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "icon": "react-icons/tb/TbMusic",
   "permissions": [
     "storage"
