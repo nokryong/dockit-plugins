@@ -27,11 +27,11 @@ function Dictionary() {
     catch (failure) { if (current === sequence.current) { setError(failure.message); report(failure); } }
     finally { if (current === sequence.current) setLoading(false); }
   };
-  return <main aria-label="국어사전">
-    <form className="row search-form" onSubmit={search}>
-      <input ref={input} aria-label="사전 검색어" placeholder="검색할 단어를 입력하세요" maxLength={100} value={term} onChange={e => setTerm(e.target.value)} />
-      <button className="primary" disabled={loading || !term.trim()}>검색</button>
-    </form>
+  return <main aria-label="우리말 사전">
+    <div className="row search-form" role="search">
+      <input ref={input} aria-label="사전 검색어" placeholder="검색할 단어를 입력하세요" maxLength={100} value={term} onChange={e => setTerm(e.target.value)} onKeyDown={event => { if (event.key === 'Enter' && !event.nativeEvent.isComposing) search(event); }} />
+      <button type="button" className="primary" disabled={loading || !term.trim()} onClick={search}>검색</button>
+    </div>
     {loading && <p role="status">사전을 검색하고 있어요.</p>}
     {error && <div className="stack" role="alert"><p className="error">{error}</p><button onClick={search}>다시 시도</button></div>}
     {!loading && !error && !result && <p className="muted">단어를 입력하면 뜻을 확인할 수 있어요.</p>}

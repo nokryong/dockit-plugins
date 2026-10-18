@@ -62,11 +62,11 @@ function Calendar() {
       {loaded && !selectedEvents.length && <p className="muted">등록된 일정이 없습니다.</p>}
       <ul className="stack">{selectedEvents.map(event => <li className="row panel" key={event.id}><p className="grow prose">{event.content}</p><button disabled={busy} aria-label={`${event.content} 삭제`} onClick={() => save(events.filter(item => item.id !== event.id))}>삭제</button></li>)}</ul>
     </section>
-    {editing && <form className="stack panel" onSubmit={submit} aria-label="일정 추가">
+    {editing && <div className="stack panel" role="group" aria-label="일정 추가">
       <label>날짜<input type="date" required min="0001-01-01" max="9999-12-31" value={itemDate} disabled={busy} onChange={e => setItemDate(e.target.value)} /></label>
-      <label>내용<input ref={input} required maxLength={500} value={content} disabled={busy} onChange={e => setContent(e.target.value)} placeholder="일정을 입력하세요" /></label>
-      <div className="row wrap"><button className="primary" disabled={busy || !content.trim() || !itemDate}>{busy ? '저장 중…' : '저장'}</button><button type="button" disabled={busy} onClick={() => setEditing(false)}>취소</button></div>
-    </form>}
+      <label>내용<input ref={input} required maxLength={500} value={content} disabled={busy} onChange={e => setContent(e.target.value)} placeholder="일정을 입력하세요" onKeyDown={event => { if (event.key === 'Enter' && !event.nativeEvent.isComposing) { if (!busy && content.trim() && itemDate) submit(event); }; }} /></label>
+      <div className="row wrap"><button type="button" className="primary" disabled={busy || !content.trim() || !itemDate} onClick={submit}>{busy ? '저장 중…' : '저장'}</button><button type="button" disabled={busy} onClick={() => setEditing(false)}>취소</button></div>
+    </div>}
   </main>;
 }
 sdk.ready.then(() => createRoot(document.getElementById('root')).render(<Calendar />));
