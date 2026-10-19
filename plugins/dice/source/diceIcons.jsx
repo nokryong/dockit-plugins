@@ -1,4 +1,4 @@
-// Dice faces from dockit/app/LIB/constant/dice.js.
+// 주사위 면 (dockit/app/LIB/constant/dice.js)
 const ICONS = {
   DiceOne: (
     <g>

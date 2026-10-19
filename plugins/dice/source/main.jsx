@@ -1,5 +1,5 @@
 import { t as uiText, useLanguage } from '../../../shared/i18n.jsx';
-// Port of dockit/app/LIB/components/panel/Dice.js. The dice count is kept in plugin storage.
+// dockit/app/LIB/components/panel/Dice.js 이식 (주사위 개수는 플러그인 저장소에 보관)
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button, Typography } from 'sud-ui';

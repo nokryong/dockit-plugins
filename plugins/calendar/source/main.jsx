@@ -1,7 +1,6 @@
 import { t as uiText, translateMessage, useLanguage } from '../../../shared/i18n.jsx';
-// Port of dockit/app/LIB/components/panel/CalendarWidget.js.
-// Events live in plugin storage instead of the account API, the add dialog opens inline above the
-// calendar because a modal cannot leave the widget frame, and holidays are not shown.
+// dockit/app/LIB/components/panel/CalendarWidget.js 이식
+// (일정은 계정 API 대신 플러그인 저장소 사용, 모달은 위젯 프레임 밖으로 나갈 수 없어서 추가 창은 달력 위에 인라인으로 표시, 공휴일 표시 없음)
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button, Calendar, DatePicker, Divider, Input, Tag, Typography } from 'sud-ui';
