@@ -1,3 +1,4 @@
+import { t as uiText, translateMessage, useLanguage } from '../../../shared/i18n.jsx';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button, Div, Input, Pagination, Radio, Select, Skeleton, SoonUIDesign, Typography, defaultTheme, darkTheme } from 'sud-ui';
@@ -18,10 +19,11 @@ const colors = [
   ['white', '흰색', '#FFFFFF', 'black-10'], ['gray', '회색', '#606060', 'white-10'],
   ['black', '검정', '#000000', 'white-10'], ['brown', '갈색', '#A52A2A', 'white-10'],
 ];
-const report = error => sdk.notify(error.message || '이미지 검색에 실패했습니다.').catch(() => {});
+const report = error => sdk.notify(translateMessage(error.message || uiText("이미지 검색에 실패했습니다."))).catch(() => {});
 const smallProps = { size: 'sm', color: 'black-10', background: 'transparent', border: false };
 
 function SearchImage({ image }) {
+  useLanguage();
   const [src, setSrc] = useState('');
   const [failed, setFailed] = useState(false);
   const [opening, setOpening] = useState(false);
@@ -48,13 +50,14 @@ function SearchImage({ image }) {
     } catch (error) { report(error); }
     finally { setOpening(false); }
   };
-  return <button ref={ref} type="button" aria-label={`${image.tags} 미리보기`} disabled={opening} onClick={preview} className="relative flex w-full shrink-0 cursor-pointer items-center justify-center overflow-hidden border-0 bg-transparent p-0 disabled:cursor-wait" style={{ aspectRatio: `${image.webformatWidth || 4} / ${image.webformatHeight || 3}` }}>
+  return <button ref={ref} type="button" aria-label={uiText("{0} 미리보기", image.tags)} disabled={opening} onClick={preview} className="relative flex w-full shrink-0 cursor-pointer items-center justify-center overflow-hidden border-0 bg-transparent p-0 disabled:cursor-wait" style={{ aspectRatio: `${image.webformatWidth || 4} / ${image.webformatHeight || 3}` }}>
     {src ? <img src={src} alt={image.tags} className="block h-auto w-full" /> : failed ? <TbPhoto size={24} /> : <Div className="h-full w-full animate-pulse" background="cool-gray-2" />}
     {opening && <span className="absolute inset-0 animate-pulse bg-black/20" />}
   </button>;
 }
 
 function ImageSearch() {
+  const language = useLanguage();
   const [theme, setTheme] = useState(sdk.theme);
   const [width, setWidth] = useState(window.innerWidth);
   const wide = width >= 220;
@@ -85,8 +88,8 @@ function ImageSearch() {
   }, []);
   useEffect(() => sdk.onAction(id => { if (id === 'key') configure(); }), [configure]);
   useEffect(() => {
-    sdk.setActions([{ id: 'key', label: 'Pixabay API Key 설정', icon: 'key', disabled: configuring }]).catch(report);
-  }, [configuring]);
+    sdk.setActions([{ id: 'key', label: uiText("Pixabay API Key 설정"), icon: 'key', disabled: configuring }]).catch(report);
+  }, [configuring, language]);
 
   const search = useCallback(async (nextPage = 1) => {
     clearTimeout(timer.current);
@@ -98,7 +101,7 @@ function ImageSearch() {
       if (sequence.current !== current) return;
       setResult(response); setPage(nextPage);
       resultsRef.current?.scrollTo({ top: 0 });
-    } catch (error) { if (sequence.current === current) { setResult(null); setSearchError(error?.message || '이미지 검색에 실패했습니다. 잠시 후 다시 시도해 주세요.'); } }
+    } catch (error) { if (sequence.current === current) { setResult(null); setSearchError(error?.message || uiText("이미지 검색에 실패했습니다. 잠시 후 다시 시도해 주세요.")); } }
     finally { if (sequence.current === current) setLoading(false); }
   }, [term, type, color, credential?.configured, credential?.revision]);
   useEffect(() => {
@@ -112,27 +115,27 @@ function ImageSearch() {
     <div ref={resultsRef} className="max-h-[450px] w-full min-w-0 overflow-y-auto">
     <div className="flex w-full min-w-0 flex-col gap-2 p-0.5">
       <div className="grid min-w-0 grid-cols-1 gap-2 min-[220px]:grid-cols-[minmax(0,1fr)_104px]">
-        <Input {...inputProps} ariaLabel="이미지 검색어" value={term} onChange={event => setTerm(event.target.value.slice(0, 100))} placeholder="검색할 단어를 입력하세요" onEnter={() => search(1)} background={`${theme.name}-1`} />
-        <Select {...inputProps} ariaLabel="이미지 종류" value={type} onChange={setType} options={[{ value: 'all', label: '전체' }, { value: 'photo', label: '사진' }, { value: 'illustration', label: '일러스트' }, { value: 'vector', label: '벡터' }]} dropdownStyle={{ boxShadow: '0 4px 6px -1px #0003', maxHeight: `min(160px, calc(100vh - ${wide ? 56 : 100}px))` }} background={`${theme.name}-1`} />
+        <Input {...inputProps} ariaLabel={uiText("이미지 검색어")} value={term} onChange={event => setTerm(event.target.value.slice(0, 100))} placeholder={uiText("검색할 단어를 입력하세요")} onEnter={() => search(1)} background={`${theme.name}-1`} />
+        <Select {...inputProps} ariaLabel={uiText("이미지 종류")} value={type} onChange={setType} options={[{ value: 'all', label: uiText("전체") }, { value: 'photo', label: uiText("사진") }, { value: 'illustration', label: uiText("일러스트") }, { value: 'vector', label: uiText("벡터") }]} dropdownStyle={{ boxShadow: '0 4px 6px -1px #0003', maxHeight: `min(160px, calc(100vh - ${wide ? 56 : 100}px))` }} background={`${theme.name}-1`} />
       </div>
       <Div className="flex flex-col gap-2 rounded-2xl p-2.5" background="cool-gray-2">
-        <Radio.Group ariaLabel="이미지 색상" options={[{ value: 'none', label: <Typography size="xs" color="white-1">전체</Typography> }, { value: 'transparent', label: <Typography size="xs" color="white-1">투명 배경</Typography> }, { value: 'grayscale', label: <Typography size="xs" color="white-1">흑백</Typography> }]} direction="horizontal" gap={8} value={color} onChange={setColor} />
+        <Radio.Group ariaLabel={uiText("이미지 색상")} options={[{ value: 'none', label: <Typography size="xs" color="white-1">{uiText("전체")}</Typography> }, { value: 'transparent', label: <Typography size="xs" color="white-1">{uiText("투명 배경")}</Typography> }, { value: 'grayscale', label: <Typography size="xs" color="white-1">{uiText("흑백")}</Typography> }]} direction="horizontal" gap={8} value={color} onChange={setColor} />
         <div className="grid w-full grid-cols-6 gap-2 min-[220px]:grid-cols-12">
-          {colors.map(([value, label, hex, iconColor]) => <Button key={value} ariaLabel={label} disabled={value === color} onClick={() => setColor(value)} shape="circle" style={{ width: '100%', minWidth: 0, height: 'auto', aspectRatio: '1', padding: 0, background: hex }} color={iconColor} shadow="sm" border={false} icon={value === color ? <PiCheckFatFill size={10} /> : undefined} />)}
+          {colors.map(([value, label, hex, iconColor]) => <Button key={value} ariaLabel={uiText(label)} disabled={value === color} onClick={() => setColor(value)} shape="circle" style={{ width: '100%', minWidth: 0, height: 'auto', aspectRatio: '1', padding: 0, background: hex }} color={iconColor} shadow="sm" border={false} icon={value === color ? <PiCheckFatFill size={10} /> : undefined} />)}
         </div>
       </Div>
       {credential && !credential.configured && <div className="flex items-center justify-between gap-2">
-        <Button {...smallProps} disabled={configuring} onClick={configure}><Typography size="xs" className="underline">API Key 설정</Typography></Button>
-        <Button {...smallProps} onClick={() => sdk.openExternal('https://pixabay.com/api/docs/').catch(report)}><Typography size="xs" className="underline">키 발급</Typography></Button>
+        <Button {...smallProps} disabled={configuring} onClick={configure}><Typography size="xs" className="underline">{uiText("API Key 설정")}</Typography></Button>
+        <Button {...smallProps} onClick={() => sdk.openExternal('https://pixabay.com/api/docs/').catch(report)}><Typography size="xs" className="underline">{uiText("키 발급")}</Typography></Button>
       </div>}
-      {loading ? <Skeleton active ariaLabel="이미지 검색 중" baseColor="cool-gray-2" highlightColor="cool-gray-1" />
+      {loading ? <Skeleton active ariaLabel={uiText("이미지 검색 중")} baseColor="cool-gray-2" highlightColor="cool-gray-1" />
         : searchError ? <div className="flex flex-col gap-2 items-center mb-2.5">
-          <Typography color="red-7" size="sm">{searchError}</Typography>
-          <Button size="sm" onClick={() => search(1)} ariaLabel="이미지 검색 다시 시도" border={false} shadow="sm" color="white-1" background="white-10">다시 시도</Button>
+          <Typography color="red-7" size="sm">{translateMessage(searchError)}</Typography>
+          <Button size="sm" onClick={() => search(1)} ariaLabel={uiText("이미지 검색 다시 시도")} border={false} shadow="sm" color="white-1" background="white-10">{uiText("다시 시도")}</Button>
         </div>
-        : credential?.configured && !result && <Typography as="div" className="text-center" color="cool-gray-7" size="sm">검색어를 입력하고 Enter를 눌러 주세요.</Typography>}
-      {!loading && result && <div aria-label="이미지 검색 결과" className="flex min-w-0 flex-col gap-2">
-        <Typography as="div" className="text-right" color="cool-gray-7" size="sm">{result.totalHits ? `총 ${result.totalHits}건` : '검색결과가 없습니다.'}</Typography>
+        : credential?.configured && !result && <Typography as="div" className="text-center" color="cool-gray-7" size="sm">{uiText("검색어를 입력하고 Enter를 눌러 주세요.")}</Typography>}
+      {!loading && result && <div aria-label={uiText("이미지 검색 결과")} className="flex min-w-0 flex-col gap-2">
+        <Typography as="div" className="text-right" color="cool-gray-7" size="sm">{result.totalHits ? uiText("총 {0}건", result.totalHits) : uiText("검색결과가 없습니다.")}</Typography>
         {result.hits.map(image => <SearchImage key={image.id} image={image} />)}
       </div>}
       {result?.totalHits > PAGE_SIZE && <Pagination className={wide ? '' : '[&>span]:hidden'} align="center" total={result.totalHits} pageSize={PAGE_SIZE} current={page} onChange={nextPage => search(nextPage)} maxVisibleButtons={wide ? 3 : 1} showFirstLast={width >= 300} activeStyle={{ background: `${theme.name}-7`, color: `${theme.name}-1`, size: 'sm', shadow: 'sm' }} defaultStyle={{ background: `${theme.name}-1`, color: `${theme.name}-7`, size: 'sm', shadow: 'sm' }} />}

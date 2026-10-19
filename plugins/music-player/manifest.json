@@ -5,7 +5,7 @@
   "name": "음악 플레이어",
   "description": "내 음악 폴더를 골라 그 안의 곡을 재생합니다.",
   "publisher": "nokryong",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "icon": "react-icons/tb/TbMusic",
   "permissions": [
     "storage"
@@ -16,5 +16,14 @@
       "title": "음악 플레이어",
       "entry": "dist/index.html"
     }
-  ]
+  ],
+  "locales": {
+    "en": {
+      "name": "Music Player",
+      "description": "Choose a local music folder and play its tracks.",
+      "widgets": {
+        "music-player": "Music Player"
+      }
+    }
+  }
 }

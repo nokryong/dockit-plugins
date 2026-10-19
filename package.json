@@ -17,7 +17,7 @@
     "sud-ui": "2.1.1"
   },
   "devDependencies": {
-    "@dockit/plugin-sdk": "https://github.com/nokryong/dockit-plugin-sdk/archive/5bf23602b42a4e93004590816a5096fcf9977bbd.tar.gz",
+    "@dockit/plugin-sdk": "https://github.com/nokryong/dockit-plugin-sdk/archive/159457d7b347253504025a9f0752078cde151708.tar.gz",
     "@tailwindcss/postcss": "4.1.18",
     "tailwindcss": "4.1.18",
     "vite": "6.4.3"
