@@ -1,3 +1,4 @@
+import { t as uiText, useLanguage } from '../../../shared/i18n.jsx';
 // Port of dockit/app/LIB/components/panel/Dice.js. The dice count is kept in plugin storage.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -16,6 +17,7 @@ const diceIcons = [
 ];
 
 function Dice() {
+  const language = useLanguage();
   const theme = useDockitTheme();
   const [count, setCount] = useState(1);
   const [loaded, setLoaded] = useState(false);
@@ -49,10 +51,10 @@ function Dice() {
     if (id === 'add') setCount(prev => (prev < 10 ? prev + 1 : prev));
     if (id === 'remove') setCount(prev => (prev > 0 ? prev - 1 : prev));
   }, []);
-  const actions = useMemo(() => [
-    ...(count < 10 ? [{ id: 'add', label: '주사위 추가', icon: 'plus', disabled: !loaded }] : []),
-    ...(count > 0 ? [{ id: 'remove', label: '주사위 줄이기', icon: 'minus', disabled: !loaded }] : []),
-  ], [count, loaded]);
+  const actions = useMemo(() => { void language; return ([
+    ...(count < 10 ? [{ id: 'add', label: uiText("주사위 추가"), icon: 'plus', disabled: !loaded }] : []),
+    ...(count > 0 ? [{ id: 'remove', label: uiText("주사위 줄이기"), icon: 'minus', disabled: !loaded }] : []),
+  ]); }, [count, loaded, language]);
   useActions(actions, onAction);
 
   const handleDiceClick = index => {
@@ -92,14 +94,14 @@ function Dice() {
       <div className="w-full flex flex-col gap-2 p-0.5">
         {count === 0 ? (
           <div className="flex justify-center text-center">
-            <Typography color="cool-gray-7" size="sm">주사위를 추가해서 사용하세요.</Typography>
+            <Typography color="cool-gray-7" size="sm">{uiText("주사위를 추가해서 사용하세요.")}</Typography>
           </div>
         ) : (
           <div className="flex flex-wrap justify-start gap-2">
             {Array.from({ length: count }).map((_, i) => (
               <Button
                 key={i}
-                ariaLabel={`주사위 ${i + 1} 굴리기`}
+                ariaLabel={uiText("주사위 {0} 굴리기", i + 1)}
                 background={getBackgroundColor(i).bg}
                 color={getBackgroundColor(i).text}
                 border={false}

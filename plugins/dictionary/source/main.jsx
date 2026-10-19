@@ -1,3 +1,4 @@
+import { t as uiText, translateMessage, useLanguage } from '../../../shared/i18n.jsx';
 // Port of dockit/app/LIB/components/panel/Dictionary.js.
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -7,6 +8,7 @@ import { PAGE_SIZE, searchDictionary } from './dictionary.mjs';
 import '../../../shared/base.css';
 
 function Dictionary() {
+  useLanguage();
   const theme = useDockitTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [result, setResult] = useState(null);
@@ -25,7 +27,7 @@ function Dictionary() {
     try {
       setResult(await searchDictionary(sdk, searchTerm));
     } catch (failure) {
-      setError(failure?.message || '사전 검색에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+      setError(failure?.message || uiText("사전 검색에 실패했습니다. 잠시 후 다시 시도해 주세요."));
     } finally {
       setLoading(false);
     }
@@ -39,7 +41,7 @@ function Dictionary() {
             {...inputProps}
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
-            placeholder="검색할 단어를 입력하세요"
+            placeholder={uiText("검색할 단어를 입력하세요")}
             onEnter={handleAPI}
             background={`${theme.name}-1`}
           />
@@ -47,22 +49,21 @@ function Dictionary() {
         <div className="flex justify-center items-center w-full">
           {loading ? (
             <div className="flex justify-center items-center w-full">
-              <Skeleton active ariaLabel="사전 검색 중" className="w-full" baseColor="cool-gray-2" highlightColor="cool-gray-1" />
+              <Skeleton active ariaLabel={uiText("사전 검색 중")} className="w-full" baseColor="cool-gray-2" highlightColor="cool-gray-1" />
             </div>
           ) : error ? (
             <div className="flex flex-col gap-2 items-center mb-2.5">
-              <Typography color="red-7" size="sm">{error}</Typography>
-              <Button size="sm" onClick={handleAPI} ariaLabel="사전 검색 다시 시도" border={false} {...shadowSm} color="white-1" background="white-10">
-                다시 시도
-              </Button>
+              <Typography color="red-7" size="sm">{translateMessage(error)}</Typography>
+              <Button size="sm" onClick={handleAPI} ariaLabel={uiText("사전 검색 다시 시도")} border={false} {...shadowSm} color="white-1" background="white-10">
+                {uiText("다시 시도")}</Button>
             </div>
           ) : !hasSearched ? (
-            <Typography color="cool-gray-7" size="sm">검색어를 입력하고 Enter를 눌러 주세요.</Typography>
+            <Typography color="cool-gray-7" size="sm">{uiText("검색어를 입력하고 Enter를 눌러 주세요.")}</Typography>
           ) : !result || !result.items.length ? (
-            <Typography color="cool-gray-7" size="sm">검색결과가 없습니다.</Typography>
+            <Typography color="cool-gray-7" size="sm">{uiText("검색결과가 없습니다.")}</Typography>
           ) : (
             <div className="w-full flex flex-col gap-2">
-              <Typography as="div" className="flex justify-end" color="cool-gray-7" size="sm">총 {result.total}건</Typography>
+              <Typography as="div" className="flex justify-end" color="cool-gray-7" size="sm">{uiText("총 ")}{result.total}{uiText("건")}</Typography>
               <div className="flex flex-col gap-8">
                 {result.items.slice(0, visibleCount).map((item, index) => (
                   <Div key={index} className="flex flex-col gap-2 p-2.5 rounded-xl" background="cool-gray-1">
@@ -82,8 +83,7 @@ function Dictionary() {
               {result.items.length > visibleCount && (
                 <div className="flex flex-col p-2.5">
                   <Button onClick={() => setVisibleCount(count => count + PAGE_SIZE)} size="sm" border={false} {...shadowSm} color="white-1" background="white-10">
-                    더보기
-                  </Button>
+                    {uiText("더보기")}</Button>
                 </div>
               )}
             </div>

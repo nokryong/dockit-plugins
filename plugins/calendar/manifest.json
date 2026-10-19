@@ -5,7 +5,7 @@
   "name": "달력",
   "description": "날짜별 일정을 저장하고 관리합니다.",
   "publisher": "nokryong",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "icon": "react-icons/tb/TbCalendar",
   "permissions": [
     "storage"
@@ -16,5 +16,14 @@
       "title": "달력",
       "entry": "dist/index.html"
     }
-  ]
+  ],
+  "locales": {
+    "en": {
+      "name": "Calendar",
+      "description": "Save and manage events by date.",
+      "widgets": {
+        "calendar": "Calendar"
+      }
+    }
+  }
 }

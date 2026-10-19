@@ -5,8 +5,25 @@
   "name": "주사위",
   "description": "주사위를 추가하고 눌러서 굴려보세요.",
   "publisher": "nokryong",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "icon": "react-icons/tb/TbDice",
-  "permissions": ["storage"],
-  "widgets": [{ "id": "dice", "title": "주사위", "entry": "dist/index.html" }]
+  "permissions": [
+    "storage"
+  ],
+  "widgets": [
+    {
+      "id": "dice",
+      "title": "주사위",
+      "entry": "dist/index.html"
+    }
+  ],
+  "locales": {
+    "en": {
+      "name": "Dice",
+      "description": "Add dice and click to roll them.",
+      "widgets": {
+        "dice": "Dice"
+      }
+    }
+  }
 }

@@ -2,9 +2,10 @@
 import { useEffect, useState } from 'react';
 import { SoonUIDesign, darkTheme, defaultTheme } from 'sud-ui';
 import 'sud-ui/dist/index.css';
+import { t, translateMessage } from './i18n.jsx';
 
 export const sdk = window.Dockit;
-export const report = error => sdk.notify(error?.message || '작업에 실패했습니다.', 'danger').catch(() => {});
+export const report = error => sdk.notify(translateMessage(error?.message || t('작업에 실패했습니다.')), 'danger').catch(() => {});
 
 // Same values as dockit/app/LIB/constant/uiProps.js.
 export const inputProps = { size: 'sm', shadow: 'none', color: 'white-1', border: false, style: { width: '100%' } };
