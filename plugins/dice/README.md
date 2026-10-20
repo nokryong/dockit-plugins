@@ -1,21 +1,23 @@
-# 주사위
+# Dice
 
-주사위를 추가하고 눌러서 굴립니다.
+English · [한국어](README.ko.md)
+
+Add dice and click them to roll.
 
 - ID: `dockit.dice`
-- 작성자: nokryong
+- Author: nokryong
 
-## 사용 방법
+## How to use
 
-제목의 **주사위 추가**로 주사위를 늘리고, 주사위를 누르면 굴러갑니다.
+Use **Add die** in the title bar to add dice, and click a die to roll it.
 
-## 데이터와 권한
+## Data and permissions
 
-| 권한 | 용도 |
+| Permission | Purpose |
 |---|---|
-| `storage` | 주사위 개수를 저장합니다. |
+| `storage` | Saves the number of dice. |
 
-- Dockit Open: `.dockit/plugin-data/dockit.dice/storage.json`에 저장합니다.
-- Dockit Web: 로그인하면 계정에 동기화되고, 로그인하지 않으면 현재 브라우저에만 저장합니다.
+- Dockit Open: saved in `.dockit/plugin-data/dockit.dice/storage.json`.
+- Dockit Web: synced to your account when signed in; otherwise saved only in the current browser.
 
-외부와 통신하지 않습니다.
+This plugin does not connect to the internet.

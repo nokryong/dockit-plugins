@@ -1,25 +1,27 @@
-# 달력
+# Calendar
 
-월별 달력에서 날짜를 골라 일정을 추가하고 삭제합니다.
+English · [한국어](README.ko.md)
+
+Pick a date on a monthly calendar to add and remove events.
 
 - ID: `dockit.calendar`
-- 작성자: nokryong
+- Author: nokryong
 
-## 사용 방법
+## How to use
 
-제목의 **+** 버튼으로 일정 추가 창을 열고 내용과 날짜를 입력합니다. 화살표로 이전 달과 다음 달을 오가고, 날짜를 누르면 아래에 그날의 일정이 나옵니다. 일정의 **×**를 누르면 삭제합니다. 공휴일은 표시하지 않습니다.
+Use the **+** button in the title bar (**Add event**) to open the event form, then enter the event and its date. Use the arrows to move between months, and click a date to see that day's events below. Click **×** on an event to delete it.
 
-## 데이터와 권한
+## Data and permissions
 
-| 권한 | 용도 |
+| Permission | Purpose |
 |---|---|
-| `storage` | 일정을 플러그인 저장소에 보관합니다. |
+| `storage` | Keeps your events in plugin storage. |
 
-- Dockit Open: `.dockit/plugin-data/dockit.calendar/storage.json`에 저장합니다.
-- Dockit Web: 로그인하면 계정에 동기화되어 다른 브라우저에서도 보입니다. 로그인하지 않으면 현재 브라우저에만 저장합니다.
+- Dockit Open: saved in `.dockit/plugin-data/dockit.calendar/storage.json`.
+- Dockit Web: synced to your account when signed in, so events also appear in other browsers; otherwise saved only in the current browser.
 
-외부와 통신하지 않습니다.
+This plugin does not connect to the internet.
 
-## 제한
+## Limitations
 
-공휴일은 표시하지 않습니다.
+Public holidays are not shown.

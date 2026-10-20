@@ -1,27 +1,29 @@
-# 이미지 검색
+# Image Search
 
-Pixabay의 사진·일러스트·벡터를 검색하고, 크게 보거나 내려받습니다.
+English · [한국어](README.ko.md)
+
+Search Pixabay photos, illustrations and vector graphics, view them large, and download them.
 
 - ID: `dockit.image-search`
-- 작성자: nokryong
+- Author: nokryong
 
-## 사용 방법
+## How to use
 
-1. 제목의 열쇠 버튼에서 본인의 [Pixabay API Key](https://pixabay.com/api/docs/)를 등록합니다.
-2. 검색어를 입력해 검색합니다. 결과를 누르면 큰 미리보기가 열리고, 내려받기·복사·출처 페이지 열기를 할 수 있습니다.
+1. Use the key button in the title bar (**Set Pixabay API key**) to register your own [Pixabay API key](https://pixabay.com/api/docs/).
+2. Enter a search term. Click a result to open a large preview, where you can download it, copy it or open its source page.
 
-## 통신과 권한
+## Network and permissions
 
-| 권한 | 용도 |
+| Permission | Purpose |
 |---|---|
-| `credentials` | 사용자의 Pixabay API Key를 호스트가 보관하고 요청에 붙입니다. 플러그인은 키 원문을 받지 않습니다. |
-| `network` | `https://pixabay.com/api/`로 검색합니다. |
-| `images` | `pixabay.com`, `cdn.pixabay.com`의 이미지를 불러옵니다. |
-| `external` | Pixabay 출처·작성자 페이지를 기본 브라우저로 엽니다. |
-| `storage` | 검색 결과를 24시간 캐시합니다. |
+| `credentials` | The host keeps your Pixabay API key and attaches it to requests. The plugin never receives the key itself. |
+| `network` | Searches through `https://pixabay.com/api/`. |
+| `images` | Loads images from `pixabay.com` and `cdn.pixabay.com`. |
+| `external` | Opens Pixabay source and author pages in your default browser. |
+| `storage` | Caches search results for 24 hours. |
 
-API Key는 기기마다 따로 저장합니다(데스크톱은 OS 암호화 저장소, 웹은 현재 브라우저에 암호화). 계정에 동기화하지 않으므로 다른 브라우저에서는 다시 등록합니다.
+The API key is saved separately on each device (in the OS-encrypted store on desktop, and encrypted in the current browser on the web). It is not synced to your account, so register it again in other browsers.
 
-## 제한
+## Limitations
 
-Pixabay의 이용 약관과 요청 한도를 따릅니다.
+Use is subject to Pixabay's terms of service and rate limits.
