@@ -42,4 +42,4 @@ plugins/
     THIRD_PARTY_NOTICES.txt
 ```
 
-새 플러그인과 업데이트는 [기여 안내](CONTRIBUTING.md)를 따라 PR로 제출하세요. 공통 API와 패키지 규격은 [Plugin SDK](https://github.com/nokryong/dockit-plugin-sdk)에서 관리합니다.
+새 플러그인과 업데이트는 [기여 안내](CONTRIBUTING.ko.md)를 따라 PR로 제출하세요. 공통 API와 패키지 규격은 [Plugin SDK](https://github.com/nokryong/dockit-plugin-sdk)에서 관리합니다.

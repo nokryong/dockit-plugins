@@ -1,22 +1,24 @@
-# 음악 플레이어
+# Music Player
 
-내 컴퓨터의 음악 폴더를 골라 그 안의 곡을 재생합니다.
+English · [한국어](README.ko.md)
+
+Choose a music folder on your computer and play the songs in it.
 
 - ID: `dockit.music-player`
-- 작성자: nokryong
+- Author: nokryong
 
-## 사용 방법
+## How to use
 
-제목의 **+** 버튼이나 폴더 버튼으로 음악 폴더를 고르면 그 폴더(하위 폴더 포함)의 오디오 파일이 이름 순서로 재생목록에 들어갑니다. 다른 폴더를 고르면 재생목록을 바꿉니다. 반복(전체 반복 → 한 곡 반복 → 목록 한 번), 이전·다음 곡, 재생·일시정지, 음량을 조절할 수 있습니다.
+Choose a music folder with the **+** button in the title bar (**Choose music folder**) or the folder button. The audio files in that folder, including subfolders, are added to the playlist in name order. Choosing another folder replaces the playlist. You can switch the repeat mode (Repeat all → Repeat one → Play list once), skip to the previous or next song, play or pause, and change the volume.
 
-## 데이터와 권한
+## Data and permissions
 
-| 권한 | 용도 |
+| Permission | Purpose |
 |---|---|
-| `storage` | 음량 같은 재생 설정을 저장합니다. |
+| `storage` | Saves playback settings such as the volume. |
 
-음악 파일은 업로드하거나 저장하지 않습니다. 선택한 폴더는 현재 창에서만 재생하며, 툴킷을 닫거나 앱을 다시 열면 폴더를 다시 골라야 합니다. 외부와 통신하지 않습니다.
+Music files are never uploaded or copied. The chosen folder plays only in the current window; after closing the toolkit or reopening the app, choose the folder again. This plugin does not connect to the internet.
 
-## 제한
+## Limitations
 
-브라우저나 앱이 지원하는 오디오 형식만 재생할 수 있습니다.
+Only audio formats supported by the browser or app can be played.

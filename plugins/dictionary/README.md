@@ -1,22 +1,24 @@
-# 우리말 사전
+# Korean Dictionary
 
-국립국어원 우리말샘에서 단어를 찾아 뜻, 품사, 원어를 보여 줍니다.
+English · [한국어](README.ko.md)
+
+Looks up Korean words in Urimalsaem, the open dictionary of the National Institute of Korean Language, and shows their meanings, parts of speech and origins.
 
 - ID: `dockit.dictionary`
-- 작성자: nokryong
+- Author: nokryong
 
-## 사용 방법
+## How to use
 
-검색어를 입력하고 Enter를 누릅니다. 결과가 많으면 아래의 **더보기**로 이어서 봅니다.
+Type a word and press Enter. If there are many results, use **Show more** at the bottom to see the rest.
 
-## 통신과 권한
+## Network and permissions
 
-| 권한 | 용도 |
+| Permission | Purpose |
 |---|---|
-| `network` | `https://dockit.kr/api/dictionary`로 검색합니다. |
+| `network` | Searches through `https://dockit.kr/api/dictionary`. |
 
-Dockit 서버가 우리말샘 API 키를 가지고 대신 조회하므로 사용자 API Key가 필요 없습니다. 검색어 외의 정보는 보내지 않으며, 플러그인 데이터는 저장하지 않습니다.
+The Dockit server holds the Urimalsaem API key and runs the lookup for you, so you do not need your own API key. Nothing is sent except the search term, and the plugin stores no data.
 
-## 제한
+## Limitations
 
-Dockit 서버나 우리말샘의 상태에 따라 검색이 실패할 수 있습니다. 서버의 호출 제한을 넘으면 잠시 후 다시 시도해야 합니다.
+Searches can fail depending on the status of the Dockit server or Urimalsaem. If you exceed the server's rate limit, try again after a while.
