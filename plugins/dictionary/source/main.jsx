@@ -1,5 +1,5 @@
 import { t as uiText, translateMessage, useLanguage } from '../../../shared/i18n.jsx';
-// Port of dockit/app/LIB/components/panel/Dictionary.js.
+// dockit/app/LIB/components/panel/Dictionary.js 이식
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button, Div, Input, Skeleton, Tag, Typography } from 'sud-ui';

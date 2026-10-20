@@ -1,4 +1,4 @@
-// Host-side pieces the original Dockit widgets read from app contexts, rebuilt on the plugin SDK.
+// 원래 Dockit 위젯이 앱 컨텍스트에서 읽던 호스트 쪽 기능을 플러그인 SDK 기반으로 재구성
 import { useEffect, useState } from 'react';
 import { SoonUIDesign, darkTheme, defaultTheme } from 'sud-ui';
 import 'sud-ui/dist/index.css';
@@ -7,7 +7,7 @@ import { t, translateMessage } from './i18n.jsx';
 export const sdk = window.Dockit;
 export const report = error => sdk.notify(translateMessage(error?.message || t('작업에 실패했습니다.')), 'danger').catch(() => {});
 
-// Same values as dockit/app/LIB/constant/uiProps.js.
+// dockit/app/LIB/constant/uiProps.js와 같은 값
 export const inputProps = { size: 'sm', shadow: 'none', color: 'white-1', border: false, style: { width: '100%' } };
 export const shadowSm = { shadow: 'sm', style: { boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08)' } };
 export const overlayShadow = { boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.12)' };
